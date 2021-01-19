@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :user_conflicts
+  resources :user_accesses
   resources :conflicts
   resources :controls
   resources :responsibilities
