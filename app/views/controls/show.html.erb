@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @control.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @control.description %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @control.end_date %>
+</p>
+
+<p>
+  <strong>Cycle:</strong>
+  <%= @control.cycle_id %>
+</p>
+
+<%= link_to 'Edit', edit_control_path(@control) %> |
+<%= link_to 'Back', controls_path %>
