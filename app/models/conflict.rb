@@ -1,4 +1,5 @@
 class Conflict < ApplicationRecord
-  belongs_to :responsibility
-  belongs_to :control
+  belongs_to :cycle
+  has_many :responsibility_conflicts
+  has_many :responsibilities, through: :responsibility_conflicts
 end

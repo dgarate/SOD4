@@ -3,7 +3,6 @@ class CreateResponsibilities < ActiveRecord::Migration[6.0]
     create_table :responsibilities do |t|
       t.string :name
       t.text :description
-      t.string :type
       t.date :end_date
       t.references :cycle, null: false, foreign_key: true
 

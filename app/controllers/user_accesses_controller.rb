@@ -19,6 +19,8 @@ class UserAccessesController < ApplicationController
 
   # GET /user_accesses/1/edit
   def edit
+  
+  
   end
 
   # POST /user_accesses

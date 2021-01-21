@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_19_002134) do
+ActiveRecord::Schema.define(version: 2021_01_19_225407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,22 +23,13 @@ ActiveRecord::Schema.define(version: 2021_01_19_002134) do
   end
 
   create_table "conflicts", force: :cascade do |t|
-    t.bigint "responsibility_id", null: false
-    t.bigint "control_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["control_id"], name: "index_conflicts_on_control_id"
-    t.index ["responsibility_id"], name: "index_conflicts_on_responsibility_id"
-  end
-
-  create_table "controls", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.date "end_date"
     t.bigint "cycle_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["cycle_id"], name: "index_controls_on_cycle_id"
+    t.index ["cycle_id"], name: "index_conflicts_on_cycle_id"
   end
 
   create_table "cycles", force: :cascade do |t|
@@ -52,12 +43,20 @@ ActiveRecord::Schema.define(version: 2021_01_19_002134) do
   create_table "responsibilities", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.string "type"
     t.date "end_date"
     t.bigint "cycle_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cycle_id"], name: "index_responsibilities_on_cycle_id"
+  end
+
+  create_table "responsibility_conflicts", force: :cascade do |t|
+    t.bigint "responsibility_id", null: false
+    t.bigint "conflict_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["conflict_id"], name: "index_responsibility_conflicts_on_conflict_id"
+    t.index ["responsibility_id"], name: "index_responsibility_conflicts_on_responsibility_id"
   end
 
   create_table "user_accesses", force: :cascade do |t|
@@ -76,6 +75,15 @@ ActiveRecord::Schema.define(version: 2021_01_19_002134) do
     t.index ["user_access_id"], name: "index_user_conflicts_on_user_access_id"
   end
 
+  create_table "user_responsibilities", force: :cascade do |t|
+    t.bigint "responsibility_id", null: false
+    t.bigint "user_access_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["responsibility_id"], name: "index_user_responsibilities_on_responsibility_id"
+    t.index ["user_access_id"], name: "index_user_responsibilities_on_user_access_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -89,11 +97,13 @@ ActiveRecord::Schema.define(version: 2021_01_19_002134) do
     t.index ["company_id"], name: "index_users_on_company_id"
   end
 
-  add_foreign_key "conflicts", "controls"
-  add_foreign_key "conflicts", "responsibilities"
-  add_foreign_key "controls", "cycles"
+  add_foreign_key "conflicts", "cycles"
   add_foreign_key "responsibilities", "cycles"
+  add_foreign_key "responsibility_conflicts", "conflicts"
+  add_foreign_key "responsibility_conflicts", "responsibilities"
   add_foreign_key "user_conflicts", "conflicts"
   add_foreign_key "user_conflicts", "user_accesses"
+  add_foreign_key "user_responsibilities", "responsibilities"
+  add_foreign_key "user_responsibilities", "user_accesses"
   add_foreign_key "users", "companies"
 end
